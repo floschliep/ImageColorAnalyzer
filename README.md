@@ -1,4 +1,4 @@
 ImageColorAnalyzer
 ==================
 
-simple iOS port of Panic's ColorArt.
+Simple iOS port of Panic's [ColorArt](http://github.com/panicinc/ColorArt).
