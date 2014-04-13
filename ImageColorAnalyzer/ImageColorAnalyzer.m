@@ -51,13 +51,33 @@
 {
 	NSCountedSet *imageColors = nil;
 	_backgroundColor = [self findEdgeColor:_image imageColors:&imageColors];
-    UIColor *primaryColor = nil; UIColor *secondaryColor = nil; UIColor *detailColor = nil;
+    UIColor *primaryColor = nil;
+    UIColor *secondaryColor = nil;
+    UIColor *detailColor = nil;
+    BOOL darkBackground = [_backgroundColor pc_isDarkColor];
+    
 	[self findTextColors:imageColors primaryColor:&primaryColor secondaryColor:&secondaryColor detailColor:&detailColor backgroundColor:_backgroundColor];
+    
+    if (!primaryColor) {
+		NSLog(@"[ImageColorAnalyzer] Missed primary color");
+        primaryColor = darkBackground ? [UIColor whiteColor] : [UIColor blackColor];
+    }
+    
+    if (!secondaryColor) {
+        NSLog(@"[ImageColorAnalyzer] Missed secondary color");
+        secondaryColor = darkBackground ? [UIColor whiteColor] : [UIColor blackColor];
+    }
+    
+    if (!detailColor) {
+        NSLog(@"[ImageColorAnalyzer] Missed detail color");
+        detailColor = darkBackground ? [UIColor whiteColor] : [UIColor blackColor];
+    }
     
     _primaryColor = primaryColor;
     _secondaryColor = secondaryColor;
     _detailColor = detailColor;
 }
+
 
 - (UIColor*)findEdgeColor:(UIImage*)image imageColors:(NSCountedSet**)colors
 {
@@ -154,6 +174,10 @@
 			}
 		}
 	}
+	
+	if (!proposedEdgeColor) {
+        proposedEdgeColor = [[PCCountedColor alloc] initWithColor:[UIColor blackColor] count:1];
+    }
 	
 	return proposedEdgeColor.color;
 }
